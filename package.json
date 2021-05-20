@@ -1,0 +1,16 @@
+{
+  "name": "terminal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/Terminal.js",
+  "dependencies": {
+    "esbuild": "^0.12.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "dev": "esbuild src/Terminal.js --format=esm --bundle --watch --outfile=dist/Terminal.js",
+    "build": "esbuild src/Terminal.js --format=esm --bundle --minify --outfile=dist/Terminal.js"
+  },
+  "author": "Ian Lucas",
+  "license": "MIT"
+}

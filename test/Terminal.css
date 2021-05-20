@@ -1,0 +1,66 @@
+body {
+  background-color: black;
+  padding: 5% 20%;
+}
+
+body,
+input {
+  color: white;
+  font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", "Liberation Mono", Menlo, Monaco, Consolas, monospace;
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+.root {
+  white-space: pre-wrap;
+}
+
+.input {
+  background: transparent;
+  border: none;
+  margin-top: 1em;
+  outline: none;
+  padding: 0;
+  position: relative;
+  width: calc(100% - 19px);
+}
+
+.input:disabled {
+  opacity: 0.5;
+}
+
+.inputWrapper:before {
+  content: '$';
+  color: dimgrey;
+  padding-right: 8px;
+}
+
+.bg.white {
+  background-color: white;
+  box-shadow: 0 0 0 3px white;
+  color: black;
+}
+
+.bg.blue {
+  background-color: dodgerblue;
+  box-shadow: 0 0 0 3px dodgerblue;
+  color: black;
+}
+
+.bg.yellow {
+  background-color: darkorange;
+  box-shadow: 0 0 0 3px darkorange;
+  color: black;
+}
+
+.bg.red {
+  background-color: crimson;
+  box-shadow: 0 0 0 3px crimson;
+  color: white;
+}
+
+.bg.green {
+  background-color: greenyellow;
+  box-shadow: 0 0 0 3px greenyellow;
+  color: black;
+}
