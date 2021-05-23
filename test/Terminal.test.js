@@ -43,7 +43,7 @@ function wait(time) {
 
 function App(text) {
   text('Defects Monitor\n', 'white')
-  text('Development Team\n')
+  text('Development & Functional Team\n')
   text('\n')
   
   if (!state.defects.length) {
@@ -58,14 +58,16 @@ function App(text) {
   text(state.console)
 }
 
-function sendTypedConsole(typed) {
-
+function getHtml(text) {
+  const wrapper = document.createElement('div')
+  wrapper.innerText = text
+  return wrapper.innerHTML
 }
 
 function sendConsole(typed, responseText) {
   state.console += `\n] ${typed}`
   if (responseText) {
-    state.console += `\n${responseText}`
+    state.console += `\n${getHtml(responseText)}`
   }
 }
 
@@ -80,7 +82,7 @@ terminal.on('clear', () => {
 terminal.on('async', async (args, plain) => {
   const [time] = args
   if (!time) {
-    return sendConsole(plain, 'Usage: async &lt;time&gt;\nWe will wait then print we waited. 🤡')
+    return sendConsole(plain, 'Usage: async <time>\nWe will wait then print we waited. 🤡')
   }
   if (!time.match(/^\d+$/)) {
     return sendConsole(plain, 'Bad number.')

@@ -1,4 +1,4 @@
-import { appendToBody, appendTo, createElement, equals, hasAttribute, removeAttribute, setAttribute, startRenderLoop, update, when, write } from './utils'
+import { appendToBody, appendTo, createElement, equals, getHtml, hasAttribute, removeAttribute, setAttribute, startRenderLoop, update, when, write } from './utils'
 
 class Terminal {
   constructor(config = {}) {
@@ -29,11 +29,12 @@ class Terminal {
     startRenderLoop(() => {
       const buffer = write()
       component(buffer)
-      if (equals(this.root, buffer.value)) {
+      const bufferValue = getHtml(buffer.value)
+      if (equals(this.root, bufferValue)) {
         // We will do nothing if nothing has changed.
         return
       }
-      update(this.root, buffer.value)
+      update(this.root, bufferValue)
     })
   }
 

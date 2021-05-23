@@ -61,3 +61,9 @@ export function write() {
   }
   return func
 }
+
+export function getHtml(text) {
+  const wrapper = createElement('div')
+  wrapper.innerHTML = text
+  return wrapper.innerHTML
+}
