@@ -1,66 +1,68 @@
-body {
-  background-color: black;
-  padding: 5% 20%;
-}
-
-body,
-input {
+.terminal-node * {
   color: white;
+  cursor: text;
   font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", "Liberation Mono", Menlo, Monaco, Consolas, monospace;
   font-size: 18px;
-  line-height: 1.55;
 }
 
-.root {
+.terminal-node {
+  background-color: #000;
+  
   white-space: pre-wrap;
 }
 
-.input {
+.terminal-input {
   background: transparent;
   border: none;
-  margin-top: 1em;
   outline: none;
   padding: 0;
   position: relative;
   width: calc(100% - 19px);
 }
 
-.input:disabled {
+.terminal-input:disabled {
   opacity: 0.5;
 }
 
-.inputWrapper:before {
+.terminal-input-wrapper:before {
   content: '$';
   color: dimgrey;
   padding-right: 8px;
 }
 
-.bg.white {
+.terminal-bg-white {
   background-color: white;
-  box-shadow: 0 0 0 3px white;
   color: black;
 }
 
-.bg.blue {
+.terminal-bg-blue {
   background-color: dodgerblue;
-  box-shadow: 0 0 0 3px dodgerblue;
   color: black;
 }
 
-.bg.yellow {
+.terminal-bg-yellow {
   background-color: darkorange;
-  box-shadow: 0 0 0 3px darkorange;
   color: black;
 }
 
-.bg.red {
+.terminal-bg-red {
   background-color: crimson;
-  box-shadow: 0 0 0 3px crimson;
   color: white;
 }
 
-.bg.green {
+.terminal-bg-green {
   background-color: greenyellow;
-  box-shadow: 0 0 0 3px greenyellow;
   color: black;
+}
+
+.terminal-tx-red {
+  color: crimson;
+}
+
+.terminal-tx-green {
+  color: greenyellow;
+}
+
+.terminal-tx-blue {
+  color: blue;
 }

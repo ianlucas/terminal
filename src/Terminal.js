@@ -1,67 +1,70 @@
-import { appendToBody, appendTo, createElement, equals, getHtml, hasAttribute, removeAttribute, setAttribute, startRenderLoop, update, when, write } from './utils'
+import Color from './Color'
+import TerminalDOM from './TerminalDOM'
+import TerminalBuffer from './TerminalBuffer'
+import Utils from './Utils'
 
 class Terminal {
-  constructor(config = {}) {
-    // Setup the internal elements.
-    this.root = createElement('div', 'root')
-    this.input = createElement('input', 'input')
-    this.inputWrapper = createElement('div', 'inputWrapper')
-    this.registeredCommands = {
-      __unknown__() {}
-    }
+  constructor(initialState = {}) {
+    this._renderFn = null
+    this._dom = new TerminalDOM
+    this._commands = {
+      _error: ({ writenl }) =>
+        writenl('Unknown command.', Color.red),
 
-    // DOM handling.
-    setAttribute(
-      this.input,
-      'placeholder',
-      config.placeholder
-      || 'Type a command here...'
+      clear: ({ state }) =>
+        state._commandStream = ''
+    }
+    this._state = new Proxy(
+      { ...initialState,
+        _commandStream: ''
+      },
+      { set: (obj, prop, value) => {
+        obj[prop] = value
+        this._render()
+        return true
+      }}
     )
-    appendTo(this.inputWrapper, this.input)
-    appendToBody(this.root)
-    appendToBody(this.inputWrapper)
-    when(this.input, 'keydown', this._handleKeydownEvent.bind(this))
+    this._dom.attachInputHandler(
+      this._handleInput.bind(this))
   }
-
-  render(component) {
-    // The main render function, it accepts a component and will
-    // render it every requested frame when something changes.
-    startRenderLoop(() => {
-      const buffer = write()
-      component(buffer)
-      const bufferValue = getHtml(buffer.value)
-      if (equals(this.root, bufferValue)) {
-        // We will do nothing if nothing has changed.
-        return
-      }
-      update(this.root, bufferValue)
+  
+  async _handleInput(command, args) {
+    if (!this._commands[command]) {
+      return this._handleInput('_error',
+        { command, ...args })
+    }
+    const buffer = new TerminalBuffer
+    await this._commands[command]({
+      command, args,
+      state: this._state,
+      write: buffer.write,
+      writenl: buffer.writenl
     })
+    this._state._commandStream += buffer.toString()
   }
-
+  
+  _render() {
+    const buffer = new TerminalBuffer
+    this._renderFn({
+      write: buffer.write,
+      writenl: buffer.writenl,
+      state: this._state
+    })
+    buffer.write(this._state._commandStream)
+    this._dom.render(buffer.toString())
+  }
+  
+  render(renderFn) {
+    this._renderFn = renderFn;
+    this._render()
+  }
+  
   on(command, handler) {
-    // Watch for commands input.
-    this.registeredCommands[command] = handler
+    this._commands[command] = handler
   }
-
-  async _handleKeydownEvent(e) {
-    // Iternally we should handle input events.
-    if (e.key !== 'Enter' || hasAttribute(e.target, 'disabled')) {
-      // We will only handle enters here (for now?).
-      return
-    }
-    const plain = e.target.value
-    const args = plain.split(' ')
-    const command = args.shift()
-    setAttribute(e.target, 'disabled')
-    if (!this.registeredCommands[command]) {
-      this.registeredCommands.__unknown__(command, plain)
-    } else {
-      const handler = this.registeredCommands[command]
-      await handler(args, plain)
-    }
-    removeAttribute(e.target, 'disabled')
-    e.target.value = ''
-    e.target.focus()
+  
+  attachTo(parentNode) {
+    this._dom.attachTo(parentNode)
   }
 }
 
