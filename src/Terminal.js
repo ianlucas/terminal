@@ -10,20 +10,11 @@ class Terminal {
     this._commands = {
       _error: ({ writenl }) =>
         writenl('Unknown command.', Color.red),
-
       clear: ({ state }) =>
         state._commandStream = ''
     }
-    this._state = new Proxy(
-      { ...initialState,
-        _commandStream: ''
-      },
-      { set: (obj, prop, value) => {
-        obj[prop] = value
-        this._render()
-        return true
-      }}
-    )
+    this._state = Utils.createState(
+      initialState, this._render.bind(this))
     this._dom.attachInputHandler(
       this._handleInput.bind(this))
   }

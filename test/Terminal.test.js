@@ -13,8 +13,6 @@ app.render(({ write, writenl, state }) => {
   writenl('Defect 10', Background.green)
   write(' Please take a look.')
   writenl(`The count is ${state.count}!`)
-  console.log(state)
-  write(state._commandStream)
 })
 
 app.on('count', ({ state }) => {
